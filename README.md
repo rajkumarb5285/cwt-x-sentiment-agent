@@ -100,7 +100,8 @@ pytest -q
 
 | File | Description |
 |---|---|
-| `evaluation_report.md` | Walk-forward Sharpe, Sortino, MaxDD vs buy-and-hold, accuracy per horizon |
+| `evaluation_report.md` | Walk-forward Sharpe, Sortino, MaxDD vs buy-and-hold, accuracy per horizon (Markdown) |
+| `evaluation_report.pdf` | Professional publication-quality evaluation report (PDF) |
 | `sentiment_summary.md` | One-page sentiment outlook with crowd behaviour and model forecast |
 | `forecast_latest.csv` | Latest n+0 to n+5 price predictions |
 | `predictions_oos.csv` | All out-of-sample predictions from walk-forward validation |
@@ -146,18 +147,20 @@ cwt-x-sentiment-agent/
 
 ---
 
-## Reproducibility
+## Submission Checklist (CrowdWisdomTrading)
 
-- Actor: `apidojo/tweet-scraper` (set in `config.yaml`; confirm it is still the right actor in the Apify Store).
-- **Never commit `.env`**. Send tokens to the reviewer privately and rotate them afterwards.
+To submit to `gilad@crowdwisdomtrading.com`:
+1. **GitHub/GitLab repository link**: Push this repository and include the URL.
+2. **APIFY / Tavily / Exa credentials & Actor IDs**:
+   - Apify Actor ID: `apidojo/tweet-scraper` (in `config.yaml`).
+   - Include your `APIFY_TOKEN`, `TAVILY_API_KEY` (or `EXA_API_KEY`) in your email.
+3. **Evaluation report**: Attach `outputs/evaluation_report.pdf` (and/or `outputs/evaluation_report.md`), featuring out-of-sample Sharpe Ratio, Sortino Ratio, and Max Drawdown.
 
 ---
 
-## Known limitations
+## Reproducibility & Service Support
 
-1. **LangGraph is a light wrapper** — it orchestrates steps but doesn't "reason" or dynamically pick actions.
-2. **VADER is less accurate than FinBERT** on finance text. Switch via `config.yaml` → `sentiment.engine: finbert`.
-3. **Sentiment-only inputs are a weak signal** — crypto is noisy and results vary by period.
-4. **Scraped X data has sampling bias** — search ranking, bots, deleted posts.
-5. **Fees are simplified** — slippage and funding costs are not modelled.
-6. **Exa integration** is not implemented (treated as optional per the brief).
+- **Apify Actor**: `apidojo/tweet-scraper` (configured in `config.yaml`).
+- **News Integration**: Dual provider support — queries **Tavily** or **Exa** based on `.env` keys (`TAVILY_API_KEY` or `EXA_API_KEY`).
+- **Price Feeds**: Binance public API (`BTCUSDT`), with automatic failover to Yahoo Finance (`BTC-USD`).
+- **Security**: Never commit `.env`. Tokens are read strictly from local environment variables.
