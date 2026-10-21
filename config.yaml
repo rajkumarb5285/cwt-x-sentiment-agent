@@ -1,0 +1,39 @@
+asset:
+  name: Bitcoin
+  symbol: BTCUSDT          # Binance symbol for prices
+  yf_symbol: BTC-USD       # fallback price source
+  queries: ["$BTC", "#Bitcoin", "bitcoin price", "BTC"]
+bar: 1h                    # bar size (Binance interval format)
+lookback_days: 180
+horizons: [0, 1, 2, 3, 4, 5]   # n+0 .. n+5 (in bars)
+
+apify:
+  actor_id: apidojo/tweet-scraper   # verify current actor in Apify Store
+  chunk_days: 2
+  max_items_per_chunk: 3000
+  min_posts_to_skip_chunk: 50       # --resume skips chunks already holding this many posts
+
+tavily:
+  days: 7
+  max_results: 8
+
+sentiment:
+  engine: vader            # vader | finbert (needs transformers + torch)
+
+model:
+  kind: ensemble           # ridge | gbm | ensemble
+  n_splits: 6
+  min_train_bars: 1500
+
+backtest:
+  fee_bps: 5               # per unit of turnover
+  threshold: 0.0           # min |predicted n+0 return| to take a position
+  long_only: false
+
+live:
+  interval_minutes: 60
+  apify_lookback_days: 1
+
+paths:
+  db: data/cwt.db
+  outputs: outputs

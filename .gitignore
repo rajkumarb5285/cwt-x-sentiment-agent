@@ -1,0 +1,16 @@
+.env
+data/*.db
+data/cwt*.db
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+venv/
+*.egg-info/
+dist/
+build/
+.mypy_cache/
+.ruff_cache/
+outputs/features.csv
+outputs/predictions_oos.csv
+outputs/backtest_frame.csv
