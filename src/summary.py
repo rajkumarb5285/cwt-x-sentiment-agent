@@ -46,17 +46,39 @@ def build_summary(cfg, df, posts, news, fc, metrics, synthetic=False):
               f"max drawdown {s['max_drawdown']:.1%} (out-of-sample, after fees)."]
     L += ["", "_Caveat: sentiment-only models have low signal-to-noise; treat forecasts as probabilistic, not advice._"]
     md = "\n".join(L)
-    return _polish(md) if os.getenv("ANTHROPIC_API_KEY") else md
+    return _polish(md)
 
 
 def _polish(md):
-    try:
-        import anthropic
-        c = anthropic.Anthropic()
-        r = c.messages.create(model=os.getenv("CLAUDE_MODEL", "claude-sonnet-5-5"), max_tokens=900, messages=[{
-            "role": "user", "content": "Rewrite this market sentiment brief as a crisp one-page analyst note. Keep every number "
-                                       "and the caveat unchanged, add nothing new:\n\n" + md}])
-        return r.content[0].text
-    except Exception as e:
-        print(f"[summary] LLM polish skipped: {e}")
-        return md
+    groq_key = os.getenv("GROQ_API_KEY") or os.getenv("GROK_API_KEY")
+    if groq_key:
+        try:
+            from openai import OpenAI
+            client = OpenAI(api_key=groq_key, base_url="https://api.groq.com/openai/v1")
+            model_name = os.getenv("GROQ_MODEL", "openai/gpt-oss-120b")
+            r = client.chat.completions.create(
+                model=model_name,
+                max_tokens=900,
+                messages=[{
+                    "role": "user",
+                    "content": "Rewrite this market sentiment brief as a crisp one-page analyst note. Keep every number and the caveat unchanged, add nothing new:\n\n" + md
+                }]
+            )
+            return r.choices[0].message.content
+        except Exception as e:
+            print(f"[summary] Groq LLM polish skipped: {e}")
+            return md
+
+    if os.getenv("ANTHROPIC_API_KEY"):
+        try:
+            import anthropic
+            c = anthropic.Anthropic()
+            r = c.messages.create(model=os.getenv("CLAUDE_MODEL", "claude-sonnet-5-5"), max_tokens=900, messages=[{
+                "role": "user", "content": "Rewrite this market sentiment brief as a crisp one-page analyst note. Keep every number "
+                                           "and the caveat unchanged, add nothing new:\n\n" + md}])
+            return r.content[0].text
+        except Exception as e:
+            print(f"[summary] Claude LLM polish skipped: {e}")
+            return md
+
+    return md

@@ -1,9 +1,9 @@
 # Evaluation report: X sentiment price prediction
 
-**SYNTHETIC demo data**: numbers below validate the pipeline only, not market performance.
+Real data: Apify X posts + Binance prices.
 
 ## Setup
-- Asset: Bitcoin (BTCUSDT), bars: 1h, bars used: 4249
+- Asset: Bitcoin (BTCUSDT), bars: 1h, bars used: 4263
 - Inputs: X sentiment and price only (sentiment score, post volume, engagement-weighted score, lagged returns, volatility, time-of-day).
   Tavily news is used only in the written summary, never as a model feature.
 - Targets: price at n+0 ... n+5, where n is the bar currently forming. Models predict log-return from the last closed bar.

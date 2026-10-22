@@ -57,7 +57,9 @@ def fetch_range(cfg, start, end, token=None):
     run = client.actor(cfg["apify"]["actor_id"]).call(run_input={
         "searchTerms": terms, "maxItems": cfg["apify"]["max_items_per_chunk"],
         "sort": "Latest", "tweetLanguage": "en"})
-    items = list(client.dataset(run["defaultDatasetId"]).iterate_items())
+    # apify_client v3+ returns a Run object; older versions return a dict
+    dataset_id = run["defaultDatasetId"] if isinstance(run, dict) else getattr(run, "default_dataset_id", None) or run.get("defaultDatasetId")
+    items = list(client.dataset(dataset_id).iterate_items())
     df = normalise(items)
     if not df.empty:
         df = df[(df.ts >= start) & (df.ts < end)]

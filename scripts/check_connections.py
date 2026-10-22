@@ -27,7 +27,9 @@ def binance():
 def apify():
     from apify_client import ApifyClient
     u = ApifyClient(os.environ["APIFY_TOKEN"]).user().get()
-    return f"authenticated as {u.get('username')}, actor = {cfg['apify']['actor_id']}"
+    # apify_client v3+ returns an object; older versions return a dict
+    username = u.get("username") if isinstance(u, dict) else getattr(u, "username", str(u))
+    return f"authenticated as {username}, actor = {cfg['apify']['actor_id']}"
 
 
 def apify_scrape():
