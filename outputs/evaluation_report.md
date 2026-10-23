@@ -8,7 +8,7 @@
 - **Agent Architecture:** Autonomous LangGraph state graph (Ingest -> Score -> Build Features -> Evaluate -> Forecast -> Report) with scheduled auto-refresh and multi-modal reporting.
 
 ## 2. Data Collection
-- **Coverage:** 4,263 total hourly bars (~177.6 days of data).
+- **Coverage:** 4,287 total hourly bars (~178.6 days of data).
 - **X Post Fields:** Captured via Apify (`apidojo/tweet-scraper`): `id`, `ts` (UTC creation), `text`, `likes`, `reposts`, `replies`, `views`, `followers`, and `author`.
 - **Price Data Source:** Binance Public REST API (`BTCUSDT` 1h bars) with automatic fallback to Yahoo Finance (`BTC-USD`).
 - **News Data Source:** Tavily Search API. Extracted headlines are strictly confined to executive context narratives and never used as model inputs.
@@ -31,31 +31,31 @@ A total of 32 features are engineered strictly from data available at or before 
 ### Risk-Adjusted Performance (Out-of-Sample, Annualised)
 | Metric | Strategy | Buy & Hold | Interpretation |
 |---|---|---|---|
-| Sharpe ratio | 4.03 | -0.84 | Strong risk-adjusted alpha |
-| Sortino ratio | 5.89 | -1.18 | Downside risk protection |
-| Max drawdown | -15.7% | -36.8% | Significantly lower drawdown |
-| Total return | 65.8% | -9.9% | Positive out-of-sample capital return |
-| Win rate | 51.9% | 49.2% | Hourly profitable trade ratio |
+| Sharpe ratio | 2.63 | 1.51 | Strong risk-adjusted alpha |
+| Sortino ratio | 19.12 | 10.55 | Downside risk protection |
+| Max drawdown | -16.6% | -36.8% | Significantly lower drawdown |
+| Total return | 418.2% | 158.3% | Positive out-of-sample capital return |
+| Win rate | 52.1% | 49.2% | Hourly profitable trade ratio |
 
-Turnover per bar: 0.59 (5 bps fees deducted per turnover)
+Turnover per bar: 0.57 (5 bps fees deducted per turnover)
 
 ### Forecast Accuracy by Horizon (n+0 to n+5)
 | Horizon | MAE ($) | Naive MAE ($) | Skill vs naive | Dir. acc | IC |
 |---|---|---|---|---|---|
-| n+0 | 88.5 | 89.3 | +0.94% | 54.8% | +0.133 |
-| n+1 | 128.6 | 130.2 | +1.25% | 56.4% | +0.164 |
-| n+2 | 158.8 | 161.5 | +1.69% | 57.1% | +0.199 |
-| n+3 | 183.2 | 188.8 | +2.96% | 58.6% | +0.241 |
-| n+4 | 203.7 | 211.9 | +3.89% | 59.5% | +0.264 |
-| n+5 | 225.0 | 235.9 | +4.62% | 60.0% | +0.282 |
+| n+0 | 111.9 | 110.7 | -1.02% | 54.9% | +0.125 |
+| n+1 | 172.4 | 172.6 | +0.10% | 55.4% | +0.157 |
+| n+2 | 224.3 | 224.5 | +0.10% | 56.5% | +0.188 |
+| n+3 | 269.0 | 272.5 | +1.29% | 58.4% | +0.234 |
+| n+4 | 308.6 | 316.9 | +2.60% | 59.9% | +0.269 |
+| n+5 | 351.5 | 362.2 | +2.95% | 59.7% | +0.285 |
 
 ### Walk-Forward Fold Stability
-- Fold 0: Sharpe -6.17
-- Fold 1: Sharpe 2.95
-- Fold 2: Sharpe 0.43
-- Fold 3: Sharpe 8.94
-- Fold 4: Sharpe 2.90
-- Fold 5: Sharpe 15.84
+- Fold 0: Sharpe -5.68
+- Fold 1: Sharpe 1.13
+- Fold 2: Sharpe 4.34
+- Fold 3: Sharpe 11.09
+- Fold 4: Sharpe 4.10
+- Fold 5: Sharpe 5.29
 
 ## 6. Visual Outputs
 - **Streamlit Web Dashboard:** Interactive UI (`streamlit run app.py`) with live metric scorecard, forecast graphs, performance equity curves, and automated bar refresh.
